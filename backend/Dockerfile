@@ -18,9 +18,11 @@ RUN adduser --disabled-password --gecos "" appuser
 
 WORKDIR /app
 
+#NODE_ENV is set to production to optimize performance and security
+ENV NODE_ENV=production
+
 # Copy only the built app and node_modules from builder
 COPY --from=builder /app /app
-COPY --from=builder /app/node_modules ./node_modules
 
 # Set ownership and switch to non-root
 RUN chown -R appuser /app

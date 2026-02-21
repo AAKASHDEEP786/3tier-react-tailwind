@@ -3,6 +3,7 @@ services:
     build: ./frontend
     ports:
       - "80:80"
+    restart: unless-stopped
     depends_on:
       - backend
     networks:
@@ -12,8 +13,10 @@ services:
     build: ./backend
     ports:
       - "5000:5000"
+    restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - DB_HOST=db
       - DB_USER=postgres
@@ -26,7 +29,7 @@ services:
   db:
     image: postgres:15
     container_name: postgres_db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -35,6 +38,11 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - app-network
 
