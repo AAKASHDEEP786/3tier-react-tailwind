@@ -1,35 +1,48 @@
-# Stage 1: Build dependencies in a full node image
+# -------------------------
+# Stage 1: Install dependencies
+# -------------------------
 FROM node:18 AS builder
 
 WORKDIR /app
 
-# Install dependencies
+# Copy dependency files
 COPY package.json package-lock.json ./
+
+# Install only production dependencies
 RUN npm ci --only=production
 
-# Copy rest of the app
+# Copy application code
 COPY . .
 
-# Stage 2: Run app in a slim image
+# -------------------------
+# Stage 2: Lightweight runtime image
+# -------------------------
 FROM node:18-slim
 
-# Create a non-root user
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
 RUN adduser --disabled-password --gecos "" appuser
 
 WORKDIR /app
 
-#NODE_ENV is set to production to optimize performance and security
 ENV NODE_ENV=production
 
-# Copy only the built app and node_modules from builder
+# Copy built app from builder
 COPY --from=builder /app /app
 
-# Set ownership and switch to non-root
+# Set permissions
 RUN chown -R appuser /app
 USER appuser
 
-# Expose app port
+# Expose backend port
 EXPOSE 5000
 
-# Start the app
+# Container Healthcheck (checks only server liveness)
+HEALTHCHECK --interval=10s --timeout=5s --retries=3 \
+  CMD curl -f http://localhost:5000/health || exit 1
+
+# Start server
 CMD ["node", "server.js"]
