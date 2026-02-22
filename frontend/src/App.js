@@ -9,7 +9,7 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/")
+    fetch("http://192.168.56.5:5000/")
       .then((res) => {
         if (!res.ok) {
           throw new Error("Backend not reachable");
