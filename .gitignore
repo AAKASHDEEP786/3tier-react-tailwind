@@ -1,0 +1,5 @@
+node_modules/
+build/
+.env
+monitoring/prometheus/data/
+*.log

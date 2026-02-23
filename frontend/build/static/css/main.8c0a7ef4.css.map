@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.8c0a7ef4.css","mappings":"AAAA,cAAc,CACd,oBAAoB,CACpB,mBAAmB,CAEnB,KACE,4BACF","sources":["index.css"],"sourcesContent":["@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\nbody {\n  font-family: Arial, sans-serif;\n}\n"],"names":[],"sourceRoot":""}
