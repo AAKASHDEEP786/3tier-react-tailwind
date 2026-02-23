@@ -48,19 +48,28 @@ services:
     image: prom/prometheus
     container_name: prometheus
     volumes:
-      - ./monitoring/prometheus:/etc/prometheus   
+      - ./monitoring/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
-    restart: unless-stopped                       
+    restart: unless-stopped
     networks:
       - app-network
 
   node-exporter:
     image: prom/node-exporter
     container_name: node_exporter
+    restart: unless-stopped
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
     ports:
       - "9100:9100"
-    restart: unless-stopped
     networks:
       - app-network
 
@@ -71,11 +80,11 @@ services:
       - "3000:3000"
     volumes:
       - grafana-storage:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning   
-    restart: unless-stopped                                            
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    restart: unless-stopped
     depends_on:
       - prometheus
-    networks:                                                    
+    networks:
       - app-network
 
 networks:
