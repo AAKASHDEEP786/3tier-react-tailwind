@@ -65,7 +65,8 @@ services:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning   
     restart: unless-stopped                                            
     depends_on:
-      - prometheus                                                    
+      - prometheus
+    networks:                                                    
       - app-network
 
 networks:
