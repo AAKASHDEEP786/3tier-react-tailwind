@@ -1,4 +1,4 @@
-# Deploy a 3 Tier container application with Docker Compose 
+# Deploy a 3 Tier container application with Docker Compose
  
 In this project, I am deploying a 3 Tier container application with Docker Compose. The application will have the following:
 
