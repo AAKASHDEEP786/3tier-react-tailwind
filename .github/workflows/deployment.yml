@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - 3tier-react-tailwind
+      - react-tailwind-website
 
 jobs:
   build-and-deploy:
