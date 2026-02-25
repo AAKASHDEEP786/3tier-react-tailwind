@@ -39,7 +39,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/app || mkdir ~/app && cd ~/app
+            cd ~/3tier-react-tailwind
             docker pull aakashdevops/tailwind-frontend:latest
             docker pull aakashdevops/tailwind-backend:latest
             docker compose -f docker-compose.prod.yml down
